@@ -1,15 +1,21 @@
 export function pitch() {
 
+    let width = 480
+    let height = 320
+
+    let bgcolor = "green"
+    let linecolor = "white"
+
     function pitch(ctx) {
 
         let svg = ctx
             .append("svg")
-            .attr("width", 480)
-            .attr("height", 320)
+            .attr("width", width)
+            .attr("height", height)
             .attr("viewBox", "-5 -5 130 90")
 
         let g = svg.append("g")
-            .attr("stroke", "white")
+            .attr("stroke", linecolor)
             .attr("fill", "none")
 
         g.append("rect")  //grass
@@ -17,7 +23,7 @@ export function pitch() {
             .attr("y", -5)
             .attr("height", 90)
             .attr("width", 130)
-            .attr("fill", "green")
+            .attr("fill", bgcolor)
             .attr("stroke", "none")
 
         g.append("rect")    //touchlines
@@ -36,7 +42,7 @@ export function pitch() {
             .attr("cx", 60)
             .attr("cy", 40)
             .attr("r", 1)
-            .attr("fill", "white")
+            .attr("fill", linecolor)
 
         g.append("circle")
             .attr("cx", 60)
@@ -71,13 +77,13 @@ export function pitch() {
             .attr("cx", 12)
             .attr("cy", 40)
             .attr("r", 1)
-            .attr("fill", "white")
+            .attr("fill", linecolor)
 
         g.append("circle")
             .attr("cx", 108)
             .attr("cy", 40)
             .attr("r", 1)
-            .attr("fill", "white")
+            .attr("fill", linecolor)
 
         g.append("path")
             .attr("d", "M 18 32 A 10 10 0 0 1 18 48 Z")
@@ -99,6 +105,11 @@ export function pitch() {
 
         return svg
     }
+
+    pitch.width = (..._) => (_.length ? ((width = _[0]), pitch) : width)
+    pitch.height = (..._) => (_.length ? ((height = _[0]), pitch) : height)
+    pitch.bgcolor = (..._) => (_.length ? ((bgcolor = _[0]), pitch) : bgcolor)
+    pitch.linecolor = (..._) => (_.length ? ((linecolor = _[0]), pitch) : linecolor)
 
     return pitch
 }

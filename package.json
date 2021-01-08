@@ -4,7 +4,7 @@
   "description": "d3 library for visualising statsbomb events",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"\"",
+    "test": "npm run build && http-server",
     "build": "rm -rf build && mkdir build && rollup -f umd --output.extend -n d3 -o build/d3-statsbombevents.js -- index.js"
   },
   "keywords": [

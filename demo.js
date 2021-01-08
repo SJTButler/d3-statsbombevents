@@ -100,8 +100,15 @@
 }
 */
 
-drawPitch = d3.pitch()
+drawPitch1 = d3.pitch()
 
-svg = d3.select("#pitch")
-    .call(drawPitch)
+svg = d3.select("#pitch1")
+    .call(drawPitch1)
+
+
+drawPitch2 = d3.pitch()
+    .bgcolor("black")
+
+svg = d3.select("#pitch2")
+    .call(drawPitch2)
 
