@@ -1,7 +1,7 @@
 
-function pitch(ctx) {
+/*function pitch(ctx) {
 
-    let svg = d3.select("#pitch")
+    let svg = ctx
         .append("svg")
         .attr("width", 480)
         .attr("height", 320)
@@ -98,9 +98,10 @@ function pitch(ctx) {
 
     return svg
 }
+*/
 
-
+drawPitch = d3.pitch()
 
 svg = d3.select("#pitch")
-    .call(pitch)
+    .call(drawPitch)
 

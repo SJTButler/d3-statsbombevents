@@ -1,0 +1,21 @@
+{
+  "name": "d3-statsbombevents",
+  "version": "0.1.0",
+  "description": "d3 library for visualising statsbomb events",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"\"",
+    "build": "rm -rf build && mkdir build && rollup -f umd --output.extend -n d3 -o build/d3-statsbombevents.js -- index.js"
+  },
+  "keywords": [
+    "d3",
+    "visualisation",
+    "statsbomb",
+    "soccer-analytics"
+  ],
+  "author": "Sam Butler",
+  "license": "BSD-3",
+  "devDependencies": {
+    "rollup": "^2.36.1"
+  }
+}
