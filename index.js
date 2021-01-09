@@ -1,1 +1,1 @@
-export { pitch } from './src/statsbombevents.js'
+export { pitch, plotShots } from './src/statsbombevents.js'

@@ -15,6 +15,7 @@ export function pitch() {
             .attr("viewBox", "-5 -5 130 90")
 
         let g = svg.append("g")
+            .attr("class", "pitch")
             .attr("stroke", linecolor)
             .attr("fill", "none")
 
@@ -103,7 +104,7 @@ export function pitch() {
             .attr("width", 2)
             .attr("height", 8)
 
-        return svg
+        return pitch
     }
 
     pitch.width = (..._) => (_.length ? ((width = _[0]), pitch) : width)
@@ -112,4 +113,38 @@ export function pitch() {
     pitch.linecolor = (..._) => (_.length ? ((linecolor = _[0]), pitch) : linecolor)
 
     return pitch
+}
+
+export function plotShots() {
+
+    let shotcolor = "white"
+    let shotsize = 1
+
+    function plotShots(ctx) {
+
+        const selection = ctx.selection ? ctx.selection() : ctx
+
+        const pitch = selection.select("svg")
+
+        let shots = pitch.selectAll("g.shot").data(d => d)
+        console.log(shots)
+        shots = shots
+            .enter()
+            .append("g")
+                .attr("class", "shot")
+            .append("circle")
+                .attr("cx", (d) => d.location[0])
+                .attr("cy", (d) => d.location[1])
+                .attr("r", shotsize)
+                .attr("fill", shotcolor)
+            
+            shots.each(function(d) {console.log(d)})
+
+    }
+
+    plotShots.shotsize = (..._) => (_.length ? ((shotsize = _[0]), plotShots) : shotsize)
+    plotShots.shotcolor = (..._) => (_.length ? ((shotcolor = _[0]), plotShots) : shotcolor)
+
+
+    return plotShots
 }
