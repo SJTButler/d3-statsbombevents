@@ -120,9 +120,10 @@ export function pitch() {
 
 export function plotShots() {
 
+
+    let shotclass = "shots"
     let shotcolor = "white"
     let shotsize = 1
-
     let leftToRight = true
 
     function plotShots(ctx) {
@@ -132,27 +133,28 @@ export function plotShots() {
 
         const xScale = leftToRight ? ((x) => x) : ((x) => 120 - x)
 
-        let shots = pitch.selectAll("g.shot").data(d => d)
+        let shots = pitch.selectAll(`g.${shotclass}`).data(d => d)
         console.log(shots)
+        
+        shots.exit().remove()
+
         shots = shots
             .enter()
             .append("g")
-                .attr("class", "shot")
+                .attr("class", shotclass)
             
         shots.append("circle")
             .attr("cx", (d) => xScale(d.location[0]))
             .attr("cy", (d) => d.location[1])
             .attr("r", shotsize)
             .attr("fill", shotcolor)
-            
-        shots.each(function(d) {console.log(d)})
 
-        shots.exit().remove()
     }
 
     plotShots.shotsize = (..._) => (_.length ? ((shotsize = _[0]), plotShots) : shotsize)
     plotShots.shotcolor = (..._) => (_.length ? ((shotcolor = _[0]), plotShots) : shotcolor)
     plotShots.leftToRight = (..._) => (_.length ? ((leftToRight = _[0]), plotShots) : leftToRight)
+    plotShots.shotclass = (..._) => (_.length ? ((shotclass = _[0]), plotShots) : shotclass)
 
 
     return plotShots
