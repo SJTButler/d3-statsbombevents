@@ -1,4 +1,6 @@
 drawPitch1 = d3.pitch()
+    .height(650)
+    .width(800)
 
 pitch1 = d3.select("#pitch1")
     .call(drawPitch1)
@@ -35,6 +37,7 @@ function sb_callback(data) {
 
     shotplot_arsenal = d3.plotShots()
         .shotclass("AWFC_shots")
+        .plotShotArrows(true)
     pitch1.datum(shots).call(shotplot_arsenal)
     pitch1.datum(arsenal_goals).call(shotplot_arsenal)
    

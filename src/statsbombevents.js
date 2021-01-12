@@ -105,8 +105,6 @@ export function pitch() {
             .attr("y", 36)
             .attr("width", 2)
             .attr("height", 8)
-
-        return pitch
     }
 
     pitch.width = (..._) => (_.length ? ((width = _[0]), pitch) : width)
@@ -126,6 +124,9 @@ export function plotShots() {
     let shotsize = 1
     let leftToRight = true
 
+    let plotShotArrows = false
+    let arrowColor = "black"
+
     function plotShots(ctx) {
 
         const selection = ctx.selection ? ctx.selection() : ctx
@@ -133,29 +134,53 @@ export function plotShots() {
 
         const xScale = leftToRight ? ((x) => x) : ((x) => 120 - x)
 
-        let shots = pitch.selectAll(`g.${shotclass}`).data(d => d)
+        let shots = pitch.selectAll(`g.${shotclass}`).data(d => d, (d) => d.id)
         console.log(shots)
-        
+
         shots.exit().remove()
 
         shots = shots
             .enter()
             .append("g")
                 .attr("class", shotclass)
-            
+           
+        if (plotShotArrows) {
+            //arrowhead marker
+            pitch.append("defs").append("marker")
+                .attr("id", `${shotclass}arrowhead`)
+                .attr("viewBox", "0 0 10 10")
+                .attr("refX", 5)
+                .attr("refY", 5)
+                .attr("markerWidth", 2)
+                .attr("markerHeight", 2)
+                .attr("orient", "auto")
+                .append("path")
+                .attr("fill", arrowColor)
+                .attr("d", "M 0 0 L 10 5 L 0 10 z")
+
+            shots.append("line")
+                .attr("x1", (d) => xScale(d.location[0]))
+                .attr("y1", (d) => d.location[1])
+                .attr("x2", (d) => xScale(d.shot.end_location[0]))
+                .attr("y2", (d) => d.shot.end_location[1])
+                .attr("stroke", arrowColor)
+                .attr("stoke-width", 0.5)
+                .attr("marker-end", `url(#${shotclass}arrowhead)`)
+        }
+
         shots.append("circle")
             .attr("cx", (d) => xScale(d.location[0]))
             .attr("cy", (d) => d.location[1])
             .attr("r", shotsize)
             .attr("fill", shotcolor)
-
     }
 
     plotShots.shotsize = (..._) => (_.length ? ((shotsize = _[0]), plotShots) : shotsize)
     plotShots.shotcolor = (..._) => (_.length ? ((shotcolor = _[0]), plotShots) : shotcolor)
     plotShots.leftToRight = (..._) => (_.length ? ((leftToRight = _[0]), plotShots) : leftToRight)
     plotShots.shotclass = (..._) => (_.length ? ((shotclass = _[0]), plotShots) : shotclass)
-
+    plotShots.plotShotArrows = (..._) => (_.length ? ((plotShotArrows = _[0]), plotShots) : plotShotArrows)
+    plotShots.arrowColor = (..._) => (_.length ? ((arrowColor = _[0]), plotShots) : plotShotArrows)
 
     return plotShots
 }
