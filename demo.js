@@ -1,117 +1,20 @@
-
-/*function pitch(ctx) {
-
-    let svg = ctx
-        .append("svg")
-        .attr("width", 480)
-        .attr("height", 320)
-        .attr("viewBox", "-5 -5 130 90")
-
-    let g = svg.append("g")
-        .attr("stroke","white")
-        .attr("fill", "none")
-
-    g.append("rect")  //grass
-        .attr("x", -5)
-        .attr("y", -5)
-        .attr("height", 90)
-        .attr("width", 130)
-        .attr("fill", "green")
-        .attr("stroke", "none")
-
-    g.append("rect")    //touchlines
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("height", 80)
-        .attr("width", 120)
-
-    g.append("line")      //half-way line
-        .attr("x1", 60)
-        .attr("x2", 60)
-        .attr("y1", 0)
-        .attr("y2", 80)
-
-    g.append("circle")
-        .attr("cx", 60)
-        .attr("cy", 40)
-        .attr("r", 1)
-        .attr("fill", "white")
-
-    g.append("circle")
-        .attr("cx", 60)
-        .attr("cy", 40)
-        .attr("r", 10)
-
-    g.append("rect")
-        .attr("x", 0)
-        .attr("y", 18)
-        .attr("width", 18)
-        .attr("height", 44)
-
-    g.append("rect")
-        .attr("x", 102)
-        .attr("y", 18)
-        .attr("width", 18)
-        .attr("height", 44)
-
-    g.append("rect")
-        .attr("x", 0)
-        .attr("y", 30)
-        .attr("width", 6)
-        .attr("height", 20)
-
-    g.append("rect")
-        .attr("x", 114)
-        .attr("y", 30)
-        .attr("width", 6)
-        .attr("height", 20)
-        
-    g.append("circle")
-        .attr("cx", 12)
-        .attr("cy", 40)
-        .attr("r", 1)
-        .attr("fill", "white")
-
-    g.append("circle")
-        .attr("cx", 108)
-        .attr("cy", 40)
-        .attr("r", 1)
-        .attr("fill", "white")
-
-    g.append("path")
-        .attr("d", "M 18 32 A 10 10 0 0 1 18 48 Z")
-
-    g.append("path")
-        .attr("d", "M 102 32 A 10 10 0 0 0 102 48 Z")
-
-    g.append("rect")
-        .attr("x", -2)
-        .attr("y", 36)
-        .attr("width", 2)
-        .attr("height", 8)
-
-    g.append("rect")
-        .attr("x", 120)
-        .attr("y", 36)
-        .attr("width", 2)
-        .attr("height", 8)
-
-    return svg
-}
-*/
-
 drawPitch1 = d3.pitch()
 
-pitch = d3.select("#pitch1")
+pitch1 = d3.select("#pitch1")
     .call(drawPitch1)
 
 
 drawPitch2 = d3.pitch()
-    .bgcolor("black")
-    .linecolor("red")
+    .bgcolor("white")
+    .linecolor("black")
 
 pitch2 = d3.select("#pitch2")
     .call(drawPitch2)
+
+drawPitch3 = d3.pitch()
+    .viewbox("40 -5 130 90")
+pitch3 = d3.select("#pitch3")
+    .call(drawPitch3)
 
 
 d3.json("https://raw.githubusercontent.com/statsbomb/open-data/master/data/events/2275104.json")
@@ -125,11 +28,17 @@ function sb_callback(data) {
 
 
     shotplot = d3.plotShots()
-    pitch.datum(goals).call(shotplot)
+    pitch1.datum(goals).call(shotplot)
 
     shotplot2 = d3.plotShots()
-        .shotcolor("green")
+        .shotcolor((d) => d.shot.outcome.name == "Goal" ? "red" : "black")
         .shotsize((d) => d.shot.statsbomb_xg * 2)
+        .leftToRight(false)
     pitch2.datum(shots).call(shotplot2)
+
+
+    pitch3.datum(goals).call(shotplot)
+
+
 
 }
