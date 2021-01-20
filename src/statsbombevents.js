@@ -16,6 +16,7 @@ export function pitch() {
             .attr("height", height)
             .attr("viewBox", viewbox)
 
+        svg.append("defs")
         let g = svg.append("g")
             .attr("class", "pitch")
             .attr("stroke", linecolor)
@@ -116,16 +117,28 @@ export function pitch() {
     return pitch
 }
 
+export function plotEvents() {
+
+    let shotplotter = plotShots()
+
+}
 export function plotShots() {
 
 
-    let shotclass = "shots"
-    let shotcolor = "white"
-    let shotsize = 1
+    let shotClass = "shots"
+
+    let shotFill = "white"
+    let shotStroke = "black"
+    let shotStrokeWidth = 0.1
+    let shotSize = 3
+
     let leftToRight = true
 
-    let plotShotArrows = false
+    let symbolType = d3.symbolSquare
+
+    let plotShotArrows = true
     let arrowColor = "black"
+    let arrowWidth = 0.5
 
     function plotShots(ctx) {
 
@@ -134,20 +147,23 @@ export function plotShots() {
 
         const xScale = leftToRight ? ((x) => x) : ((x) => 120 - x)
 
-        let shots = pitch.selectAll(`g.${shotclass}`).data(d => d, (d) => d.id)
-        console.log(shots)
+        let shots = pitch.selectAll(`g.${shotClass}`).data(d => d, (d) => d.id)
+        //console.log(shots)
+
+        let symbol = d3.symbol().type(symbolType).size(shotSize)
 
         shots.exit().remove()
 
         shots = shots
             .enter()
             .append("g")
-                .attr("class", shotclass)
+                .attr("class", shotClass)
            
         if (plotShotArrows) {
             //arrowhead marker
-            pitch.append("defs").append("marker")
-                .attr("id", `${shotclass}arrowhead`)
+            pitch.select(`marker#${shotClass}arrowhead`).remove()
+            pitch.select("defs").append("marker")
+                .attr("id", `${shotClass}arrowhead`)
                 .attr("viewBox", "0 0 10 10")
                 .attr("refX", 5)
                 .attr("refY", 5)
@@ -164,23 +180,44 @@ export function plotShots() {
                 .attr("x2", (d) => xScale(d.shot.end_location[0]))
                 .attr("y2", (d) => d.shot.end_location[1])
                 .attr("stroke", arrowColor)
-                .attr("stoke-width", 0.5)
-                .attr("marker-end", `url(#${shotclass}arrowhead)`)
+                .attr("stroke-width", arrowWidth)
+                .attr("marker-end", `url(#${shotClass}arrowhead)`)
         }
 
-        shots.append("circle")
-            .attr("cx", (d) => xScale(d.location[0]))
-            .attr("cy", (d) => d.location[1])
-            .attr("r", shotsize)
-            .attr("fill", shotcolor)
+        shots.append("path")
+            .attr("d", symbol)
+            .attr("transform", d => `translate(${xScale(d.location[0])},${d.location[1]})`)
+            .attr("fill", shotFill)
+            .attr("stroke", shotStroke)
+            .attr("stroke-width", shotStrokeWidth)
     }
 
-    plotShots.shotsize = (..._) => (_.length ? ((shotsize = _[0]), plotShots) : shotsize)
-    plotShots.shotcolor = (..._) => (_.length ? ((shotcolor = _[0]), plotShots) : shotcolor)
+    plotShots.shotClass = (..._) => (_.length ? ((shotClass = _[0]), plotShots) : shotClass)
+
+    plotShots.shotFill = (..._) => (_.length ? ((shotFill = _[0]), plotShots) : shotFill)
+    plotShots.shotSize = (..._) => (_.length ? ((shotSize = _[0]), plotShots) : shotSize)
+    plotShots.shotStroke = (..._) => (_.length ? ((shotStroke = _[0]), plotShots) : shotStroke)
+    plotShots.shotStrokeWidth = (..._) => (_.length ? ((shotStrokeWidth = _[0]), plotShots) : shotStrokeWidth)
+
     plotShots.leftToRight = (..._) => (_.length ? ((leftToRight = _[0]), plotShots) : leftToRight)
-    plotShots.shotclass = (..._) => (_.length ? ((shotclass = _[0]), plotShots) : shotclass)
+ 
+    plotShots.symbolType = (..._) => (_.length ? ((symbolType = _[0]), plotShots) : symbolType)
+
     plotShots.plotShotArrows = (..._) => (_.length ? ((plotShotArrows = _[0]), plotShots) : plotShotArrows)
-    plotShots.arrowColor = (..._) => (_.length ? ((arrowColor = _[0]), plotShots) : plotShotArrows)
+    plotShots.arrowColor = (..._) => (_.length ? ((arrowColor = _[0]), plotShots) : arrowColor)
+    plotShots.arrowWidth = (..._) => (_.length ? ((arrowWidth = _[0]), plotShots) : arrowWidth)
 
     return plotShots
+}
+
+
+export function plotPasses() {
+
+
+}
+
+export function plotDribbles() {}
+
+export function heatmap() {
+
 }

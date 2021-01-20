@@ -36,14 +36,16 @@ function sb_callback(data) {
     bristol_goals = goals.filter(x => x.team.name == "Bristol City WFC")
 
     shotplot_arsenal = d3.plotShots()
-        .shotclass("AWFC_shots")
+        .shotClass("AWFC_shots")
         .plotShotArrows(true)
+        //.symbolType(d3.symbolTriangle)
+        .shotSize(d => Math.sqrt(d.shot.statsbomb_xg)*10)
     pitch1.datum(shots).call(shotplot_arsenal)
     pitch1.datum(arsenal_goals).call(shotplot_arsenal)
    
 
-    shotplot_bristol = d3.plotShots()
-        .shotclass("BCWFC_shots")
+    shotplot_bristol = shotplot_arsenal
+        .shotClass("BCWFC_shots")
         .leftToRight(false)
     pitch1.datum(bristol_goals).call(shotplot_bristol)
 
