@@ -294,7 +294,10 @@ export function plotShots() {
 
 
         ctx.call(arrowPlotter)
-        ctx.call(shotPlotter) 
+        if (plotShotArrows) {
+            ctx.call(shotPlotter)
+        }
+
 
     }
 
