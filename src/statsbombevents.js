@@ -17,6 +17,7 @@ export function pitch() {
             .attr("viewBox", viewbox)
 
         svg.append("defs")
+
         let g = svg.append("g")
             .attr("class", "pitch")
             .attr("stroke", linecolor)
@@ -117,15 +118,147 @@ export function pitch() {
     return pitch
 }
 
-export function plotEvents() {
+export function plotPoints() {
 
-    let shotplotter = plotShots()
+    let pointClass = "point"
+
+    let pointFill = "white"
+    let pointStroke = "black"
+    let pointStrokeWidth = 0.1
+
+    let leftToRight = true
+
+    let pointSymbolType = d3.symbolSquare
+
+    let pointLocationX = d => d.location[0]
+    let pointLocationY = d => d.location[1]
+    let pointSize = 3
+
+    function plotPoints(ctx) {
+
+        const selection = ctx.selection ? ctx.selection() : ctx
+        const pitch = selection.select("svg")
+
+        const xScale = leftToRight ? ((x) => x) : ((x) => 120 - x)
+        const yScale = leftToRight ? ((y) => y) : ((y) => 80 - y)
+
+        let points = pitch.selectAll(`g.${pointClass}`).data(d => d, (d) => d.id)
+        //console.log(shots)
+
+        let symbol = pointSymbolType == "none" ? "" : d3.symbol().type(pointSymbolType).size(pointSize) 
+
+        points.exit().remove()
+
+        points = points
+            .enter()
+            .append("g")
+                .attr("class", pointClass)
+            .append("path")
+                
+        points.attr("d", symbol)
+            .attr("transform", d => `translate(${xScale(pointLocationX(d))},${yScale(pointLocationY(d))})`)
+            .attr("fill", pointFill)
+            .attr("stroke", pointStroke)
+            .attr("stroke-width", pointStrokeWidth)
+
+    }
+
+    plotPoints.pointClass = (..._) => (_.length ? ((pointClass = _[0]), plotPoints) : pointClass)
+
+    plotPoints.pointFill = (..._) => (_.length ? ((pointFill = _[0]), plotPoints) : pointFill)
+    plotPoints.pointStroke = (..._) => (_.length ? ((pointStroke = _[0]), plotPoints) : pointStroke)
+    plotPoints.pointStrokeWidth = (..._) => (_.length ? ((pointStrokeWidth = _[0]), plotPoints) : pointStrokeWidth)
+
+    plotPoints.leftToRight = (..._) => (_.length ? ((leftToRight = _[0]), plotPoints) : leftToRight)
+ 
+    plotPoints.pointSymbolType = (..._) => (_.length ? ((pointSymbolType = _[0]), plotPoints) : pointSymbolType)
+
+    plotPoints.pointLocationX = (..._) => (_.length ? ((pointLoctionX = _[0]), plotPoints) : pointLocationX)
+    plotPoints.pointLocationY = (..._) => (_.length ? ((pointLoctionY = _[0]), plotPoints) : pointLocationY)
+    plotPoints.pointSize = (..._) => (_.length ? ((pointSize = _[0]), plotPoints) : pointSize)
+
+    return plotPoints
+}
+
+export function plotArrows() {
+
+    let arrowClass = "arrow"
+    let arrowColor = "black"
+    let arrowWidth = 0.5
+
+    let leftToRight = true
+
+    let arrowStartingX = d => d.location[0]
+    let arrowStartingY = d => d.location[1]
+
+    let arrowEndingX = d => d.location[0]
+    let arrowEndingY = d => d.location[1]
+
+    function plotArrows(ctx) {
+
+        const selection = ctx.selection ? ctx.selection() : ctx
+        const pitch = selection.select("svg")
+
+        const xScale = leftToRight ? ((x) => x) : ((x) => 120 - x)
+        const yScale = leftToRight ? ((y) => y) : ((y) => 80 - y)
+
+        let arrows = pitch.selectAll(`g.${arrowClass}`).data(d => d, (d) => d.id)
+
+        arrows.exit().remove()
+
+        arrows = arrows
+            .enter()
+            .append("g")
+                .attr("class", arrowClass)
+            
+
+        pitch.select(`marker#${arrowClass}_arrowhead`).remove()
+        pitch.select("defs").append("marker")
+            .attr("id", `${arrowClass}arrowhead`)
+            .attr("viewBox", "0 0 10 10")
+            .attr("refX", 5)
+            .attr("refY", 5)
+            .attr("markerWidth", 2)
+            .attr("markerHeight", 2)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("fill", arrowColor)
+            .attr("d", "M 0 0 L 10 5 L 0 10 z")
+
+        
+
+        arrows.append("line")
+            .attr("x1", (d) => xScale(arrowStartingX(d)))
+            .attr("y1", (d) => yScale(arrowStartingY(d)))
+            .attr("x2", (d) => xScale(arrowEndingX(d)))
+            .attr("y2", (d) => yScale(arrowEndingY(d)))
+            .attr("stroke", arrowColor)
+            .attr("stroke-width", arrowWidth)
+            .attr("marker-end", `url(#${arrowClass}arrowhead)`)
+
+    }
+
+    
+    plotArrows.arrowClass = (..._) => (_.length ? ((arrowClass = _[0]), plotArrows) : arrowClass)
+
+    plotArrows.arrowColor = (..._) => (_.length ? ((arrowColor = _[0]), plotArrows) : arrowColor)
+    plotArrows.arrowWidth = (..._) => (_.length ? ((arrowWidth = _[0]), plotArrows) : arrowWidth)
+
+    plotArrows.leftToRight = (..._) => (_.length ? ((leftToRight = _[0]), plotArrows) : leftToRight)
+
+    plotArrows.arrowStartingX = (..._) => (_.length ? ((arrowStartingX = _[0]), plotArrows) : arrowStartingX)
+    plotArrows.arrowStartingY = (..._) => (_.length ? ((arrowStartingY = _[0]), plotArrows) : arrowStartingY)
+    plotArrows.arrowEndingX = (..._) => (_.length ? ((arrowEndingX = _[0]), plotArrows) : arrowEndingX)
+    plotArrows.arrowEndingY = (..._) => (_.length ? ((arrowEndingY = _[0]), plotArrows) : arrowEndingY)
+
+    return plotArrows
 
 }
+
 export function plotShots() {
 
 
-    let shotClass = "shots"
+    let shotClassPrefix = "shots"
 
     let shotFill = "white"
     let shotStroke = "black"
@@ -142,62 +275,36 @@ export function plotShots() {
 
     function plotShots(ctx) {
 
-        const selection = ctx.selection ? ctx.selection() : ctx
-        const pitch = selection.select("svg")
+        let arrowPlotter = plotArrows()
+            .arrowClass(`${shotClassPrefix}_Arrows`)
+            .arrowColor(arrowColor)
+            .arrowWidth(arrowWidth)
+            .leftToRight(leftToRight)
+            .arrowEndingX(d => d.shot.end_location[0])
+            .arrowEndingY(d => d.shot.end_location[1])
 
-        const xScale = leftToRight ? ((x) => x) : ((x) => 120 - x)
+        let shotPlotter = plotPoints()
+            .pointClass(`${shotClassPrefix}_Shots`)
+            .pointFill(shotFill)
+            .pointStroke(shotStroke)
+            .pointStrokeWidth(shotStrokeWidth)
+            .pointSize(shotSize)
+            .pointSymbolType(symbolType)
+            .leftToRight(leftToRight)
 
-        let shots = pitch.selectAll(`g.${shotClass}`).data(d => d, (d) => d.id)
-        //console.log(shots)
 
-        let symbol = d3.symbol().type(symbolType).size(shotSize)
+        ctx.call(arrowPlotter)
+        ctx.call(shotPlotter) 
 
-        shots.exit().remove()
-
-        shots = shots
-            .enter()
-            .append("g")
-                .attr("class", shotClass)
-           
-        if (plotShotArrows) {
-            //arrowhead marker
-            pitch.select(`marker#${shotClass}arrowhead`).remove()
-            pitch.select("defs").append("marker")
-                .attr("id", `${shotClass}arrowhead`)
-                .attr("viewBox", "0 0 10 10")
-                .attr("refX", 5)
-                .attr("refY", 5)
-                .attr("markerWidth", 2)
-                .attr("markerHeight", 2)
-                .attr("orient", "auto")
-                .append("path")
-                .attr("fill", arrowColor)
-                .attr("d", "M 0 0 L 10 5 L 0 10 z")
-
-            shots.append("line")
-                .attr("x1", (d) => xScale(d.location[0]))
-                .attr("y1", (d) => d.location[1])
-                .attr("x2", (d) => xScale(d.shot.end_location[0]))
-                .attr("y2", (d) => d.shot.end_location[1])
-                .attr("stroke", arrowColor)
-                .attr("stroke-width", arrowWidth)
-                .attr("marker-end", `url(#${shotClass}arrowhead)`)
-        }
-
-        shots.append("path")
-            .attr("d", symbol)
-            .attr("transform", d => `translate(${xScale(d.location[0])},${d.location[1]})`)
-            .attr("fill", shotFill)
-            .attr("stroke", shotStroke)
-            .attr("stroke-width", shotStrokeWidth)
     }
 
-    plotShots.shotClass = (..._) => (_.length ? ((shotClass = _[0]), plotShots) : shotClass)
+    plotShots.shotClassPrefix = (..._) => (_.length ? ((shotClassPrefix = _[0]), plotShots) : shotClassPrefix)
 
     plotShots.shotFill = (..._) => (_.length ? ((shotFill = _[0]), plotShots) : shotFill)
-    plotShots.shotSize = (..._) => (_.length ? ((shotSize = _[0]), plotShots) : shotSize)
     plotShots.shotStroke = (..._) => (_.length ? ((shotStroke = _[0]), plotShots) : shotStroke)
     plotShots.shotStrokeWidth = (..._) => (_.length ? ((shotStrokeWidth = _[0]), plotShots) : shotStrokeWidth)
+
+    plotShots.shotSize = (..._) => (_.length ? ((shotSize = _[0]), plotShots) : shotSize)
 
     plotShots.leftToRight = (..._) => (_.length ? ((leftToRight = _[0]), plotShots) : leftToRight)
  
