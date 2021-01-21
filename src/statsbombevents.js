@@ -293,11 +293,11 @@ export function plotShots() {
             .leftToRight(leftToRight)
 
 
-        ctx.call(arrowPlotter)
         if (plotShotArrows) {
-            ctx.call(shotPlotter)
+            ctx.call(arrowPlotter)
         }
 
+        ctx.call(shotPlotter) 
 
     }
 
