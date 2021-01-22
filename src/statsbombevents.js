@@ -214,7 +214,7 @@ export function plotArrows() {
 
         pitch.select(`marker#${arrowClass}_arrowhead`).remove()
         pitch.select("defs").append("marker")
-            .attr("id", `${arrowClass}arrowhead`)
+            .attr("id", `${arrowClass}_arrowhead`)
             .attr("viewBox", "0 0 10 10")
             .attr("refX", 5)
             .attr("refY", 5)
@@ -222,8 +222,8 @@ export function plotArrows() {
             .attr("markerHeight", 2)
             .attr("orient", "auto")
             .append("path")
-            .attr("fill", arrowColor)
-            .attr("d", "M 0 0 L 10 5 L 0 10 z")
+                .attr("fill", arrowColor)
+                .attr("d", "M 0 0 L 10 5 L 0 10 z")
 
         
 
@@ -234,7 +234,7 @@ export function plotArrows() {
             .attr("y2", (d) => yScale(arrowEndingY(d)))
             .attr("stroke", arrowColor)
             .attr("stroke-width", arrowWidth)
-            .attr("marker-end", `url(#${arrowClass}arrowhead)`)
+            .attr("marker-end", `url(#${arrowClass}_arrowhead)`)
 
     }
 
@@ -276,7 +276,7 @@ export function plotShots() {
     function plotShots(ctx) {
 
         let arrowPlotter = plotArrows()
-            .arrowClass(`${shotClassPrefix}_Arrows`)
+            .arrowClass(`${shotClassPrefix}_ShotArrows`)
             .arrowColor(arrowColor)
             .arrowWidth(arrowWidth)
             .leftToRight(leftToRight)
@@ -284,7 +284,7 @@ export function plotShots() {
             .arrowEndingY(d => d.shot.end_location[1])
 
         let shotPlotter = plotPoints()
-            .pointClass(`${shotClassPrefix}_Shots`)
+            .pointClass(`${shotClassPrefix}_ShotPoints`)
             .pointFill(shotFill)
             .pointStroke(shotStroke)
             .pointStrokeWidth(shotStrokeWidth)
@@ -320,9 +320,68 @@ export function plotShots() {
     return plotShots
 }
 
-
 export function plotPasses() {
+    
+    let passClassPrefix = "passes"
 
+    let passFill = "white"
+    let passStroke = "black"
+    let passStrokeWidth = 0.1
+    let passSize = 0.5
+
+    let leftToRight = true
+
+    let symbolType = d3.symbolCircle
+
+    let plotPassArrows = true
+    let arrowColor = "black"
+    let arrowWidth = 0.5
+
+    function plotPasses(ctx) {
+
+        let arrowPlotter = plotArrows()
+            .arrowClass(`${passClassPrefix}_PassArrows`)
+            .arrowColor(arrowColor)
+            .arrowWidth(arrowWidth)
+            .leftToRight(leftToRight)
+            .arrowEndingX(d => d.pass.end_location[0])
+            .arrowEndingY(d => d.pass.end_location[1])
+
+        let passPlotter = plotPoints()
+            .pointClass(`${passClassPrefix}_PassPoints`)
+            .pointFill(passFill)
+            .pointStroke(passStroke)
+            .pointStrokeWidth(passStrokeWidth)
+            .pointSize(passSize)
+            .pointSymbolType(symbolType)
+            .leftToRight(leftToRight)
+
+
+        if (plotPassArrows) {
+            ctx.call(arrowPlotter)
+        }
+
+        ctx.call(passPlotter) 
+
+    }
+
+    plotPasses.passClassPrefix = (..._) => (_.length ? ((passClassPrefix = _[0]), plotPasses) : passClassPrefix)
+
+    plotPasses.passFill = (..._) => (_.length ? ((passFill = _[0]), plotPasses) : passFill)
+    plotPasses.passStroke = (..._) => (_.length ? ((passStroke = _[0]), plotPasses) : passStroke)
+    plotPasses.passStrokeWidth = (..._) => (_.length ? ((passStrokeWidth = _[0]), plotPasses) : passStrokeWidth)
+
+    plotPasses.passSize = (..._) => (_.length ? ((passSize = _[0]), plotPasses) : passSize)
+
+    plotPasses.leftToRight = (..._) => (_.length ? ((leftToRight = _[0]), plotPasses) : leftToRight)
+ 
+    plotPasses.symbolType = (..._) => (_.length ? ((symbolType = _[0]), plotPasses) : symbolType)
+
+    plotPasses.plotPassArrows = (..._) => (_.length ? ((plotPassArrows = _[0]), plotPasses) : plotPassArrows)
+    plotPasses.arrowColor = (..._) => (_.length ? ((arrowColor = _[0]), plotPasses) : arrowColor)
+    plotPasses.arrowWidth = (..._) => (_.length ? ((arrowWidth = _[0]), plotPasses) : arrowWidth)
+
+    return plotPasses
 
 }
 

@@ -6,14 +6,18 @@ pitch1 = d3.select("#pitch1")
     .call(drawPitch1)
 
 
-/*
+
 drawPitch2 = d3.pitch()
-    .bgcolor("white")
-    .linecolor("black")
+    .height(650)
+    .width(800)
+    .bgcolor("black")
+    .linecolor("white")
 
 pitch2 = d3.select("#pitch2")
     .call(drawPitch2)
 
+
+    /*
 drawPitch3 = d3.pitch()
     .viewbox("40 -5 130 90")
 pitch3 = d3.select("#pitch3")
@@ -54,11 +58,27 @@ function sb_callback(data) {
     shotplotter_arsenal = d3.plotShots()
         .shotClassPrefix("AWFC")
         .shotSize(d => Math.sqrt(d.shot.statsbomb_xg) * 10)
+        .symbolType(d => d.player.name == "Vivianne Miedema" ? d3.symbolSquare : d3.symbolCross)
 
     pitch1.datum(arsenal_goals).call(shotplotter_arsenal)
 
+    shotplotter_bristol = shotplotter_arsenal
+        .shotClassPrefix("BWFC")
+        .leftToRight(false)
+
+    pitch1.datum(bristol_goals).call(shotplotter_bristol)
 
 
+    passes_to_miedema = data.filter(x => x["type"]["name"] == "Pass" 
+        && "recipient" in x["pass"]
+        && x["pass"]["recipient"]["name"] == "Vivianne Miedema")
+
+    passplotter = d3.plotPasses()
+        .passClassPrefix("toMiedema")
+        .arrowColor("white")
+        .arrowWidth(0.5)
+
+    pitch2.datum(passes_to_miedema).call(passplotter)
 
     /*
     shotplot2 = d3.plotShots()
