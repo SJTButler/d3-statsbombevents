@@ -257,65 +257,51 @@ export function plotArrows() {
 
 export function plotShots() {
 
-
     let shotClassPrefix = "shots"
-
-    let shotFill = "white"
-    let shotStroke = "black"
-    let shotStrokeWidth = 0.1
-    let shotSize = 3
-
     let leftToRight = true
-
-    let symbolType = d3.symbolSquare
-
     let plotShotArrows = true
-    let arrowColor = "black"
-    let arrowWidth = 0.5
+
+    let arrowPlotter = plotArrows()
+        .arrowClass(`${shotClassPrefix}_ShotArrows`)
+        .arrowEndingX(d => d.shot.end_location[0])
+        .arrowEndingY(d => d.shot.end_location[1])
+    
+    let shotPlotter = plotPoints()
+        .pointClass(`${shotClassPrefix}_ShotPoints`)
 
     function plotShots(ctx) {
-
-        let arrowPlotter = plotArrows()
-            .arrowClass(`${shotClassPrefix}_ShotArrows`)
-            .arrowColor(arrowColor)
-            .arrowWidth(arrowWidth)
-            .leftToRight(leftToRight)
-            .arrowEndingX(d => d.shot.end_location[0])
-            .arrowEndingY(d => d.shot.end_location[1])
-
-        let shotPlotter = plotPoints()
-            .pointClass(`${shotClassPrefix}_ShotPoints`)
-            .pointFill(shotFill)
-            .pointStroke(shotStroke)
-            .pointStrokeWidth(shotStrokeWidth)
-            .pointSize(shotSize)
-            .pointSymbolType(symbolType)
-            .leftToRight(leftToRight)
-
 
         if (plotShotArrows) {
             ctx.call(arrowPlotter)
         }
-
         ctx.call(shotPlotter) 
 
     }
 
-    plotShots.shotClassPrefix = (..._) => (_.length ? ((shotClassPrefix = _[0]), plotShots) : shotClassPrefix)
+    plotShots.shotClassPrefix = (..._) => (_.length ? ((shotClassPrefix = _[0],
+         arrowPlotter.arrowClass(`${_[0]}_ShotArrows`),
+         shotPlotter.pointClass(`${_[0]}_ShotPoints`)), plotShots) : shotClassPrefix)
 
-    plotShots.shotFill = (..._) => (_.length ? ((shotFill = _[0]), plotShots) : shotFill)
-    plotShots.shotStroke = (..._) => (_.length ? ((shotStroke = _[0]), plotShots) : shotStroke)
-    plotShots.shotStrokeWidth = (..._) => (_.length ? ((shotStrokeWidth = _[0]), plotShots) : shotStrokeWidth)
+    plotShots.leftToRight = (..._) => (_.length ? ((leftToRight = _[0],
+        arrowPlotter.leftToRight(_[0]),
+        shotPlotter.leftToRight(_[0])), plotShots) : leftToRight)
 
-    plotShots.shotSize = (..._) => (_.length ? ((shotSize = _[0]), plotShots) : shotSize)
-
-    plotShots.leftToRight = (..._) => (_.length ? ((leftToRight = _[0]), plotShots) : leftToRight)
- 
-    plotShots.symbolType = (..._) => (_.length ? ((symbolType = _[0]), plotShots) : symbolType)
-
-    plotShots.plotShotArrows = (..._) => (_.length ? ((plotShotArrows = _[0]), plotShots) : plotShotArrows)
-    plotShots.arrowColor = (..._) => (_.length ? ((arrowColor = _[0]), plotShots) : arrowColor)
-    plotShots.arrowWidth = (..._) => (_.length ? ((arrowWidth = _[0]), plotShots) : arrowWidth)
+    plotShots.shotFill = (..._) => 
+        (_.length ? ((shotPlotter.pointFill(_[0])), plotShots) : shotPlotter.pointFill())
+    plotShots.shotStroke = (..._) => 
+        (_.length ? ((shotPlotter.pointStroke(_[0])), plotShots) : shotPlotter.pointStroke())
+    plotShots.shotStrokeWidth = (..._) => 
+        (_.length ? ((shotPlotter.pointStrokeWidth(_[0])), plotShots) : shotPlotter.pointStrokeWidth())
+    plotShots.shotSize = (..._) => 
+        (_.length ? ((shotPlotter.pointSize(_[0])), plotShots) : shotPlotter.pointSize())
+    plotShots.symbolType = (..._) => 
+        (_.length ? ((shotPlotter.pointSymbolType(_[0])), plotShots) : shotPlotter.pointSymbolType())
+    plotShots.plotShotArrows = (..._) => 
+        (_.length ? ((plotShotArrows = _[0]), plotShots) : plotShotArrows)
+    plotShots.arrowColor = (..._) => 
+        (_.length ? ((arrowPlotter.arrowColor(_[0])), plotShots) : arrowPlotter.arrowColor())
+    plotShots.arrowWidth = (..._) => 
+        (_.length ? ((arrowPlotter.arrowWidth(_[0])), plotShots) : arrowPlotter.arrowWidth())
 
     return plotShots
 }
