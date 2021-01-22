@@ -74,10 +74,9 @@ function sb_callback(data) {
         && x["pass"]["recipient"]["name"] == "Vivianne Miedema")
 
     passplotter = d3.plotPasses()
-        .passClassPrefix("toMiedema")
-        .arrowColor("white")
-        .arrowWidth(0.5)
+        .classPrefix("toMiedema")
 
+        
     pitch2.datum(passes_to_miedema).call(passplotter)
 
     /*

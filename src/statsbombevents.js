@@ -321,127 +321,21 @@ export function plotEvents() {
 }
 
 export function plotShots() {
-    /*
-    let shotClassPrefix = "shots"
-    let leftToRight = true
-    let plotShotArrows = true
-
-    let arrowPlotter = plotArrows()
-        .arrowClass(`${shotClassPrefix}_ShotArrows`)
-        .arrowEndingX(d => d.shot.end_location[0])
-        .arrowEndingY(d => d.shot.end_location[1])
-    
-    let shotPlotter = plotPoints()
-        .pointClass(`${shotClassPrefix}_ShotPoints`)
-
-    function plotShots(ctx) {
-
-        if (plotShotArrows) {
-            ctx.call(arrowPlotter)
-        }
-        ctx.call(shotPlotter) 
-
-    }
-
-    plotShots.shotClassPrefix = (..._) => (_.length ? ((shotClassPrefix = _[0],
-         arrowPlotter.arrowClass(`${_[0]}_ShotArrows`),
-         shotPlotter.pointClass(`${_[0]}_ShotPoints`)), plotShots) : shotClassPrefix)
-
-    plotShots.leftToRight = (..._) => (_.length ? ((leftToRight = _[0],
-        arrowPlotter.leftToRight(_[0]),
-        shotPlotter.leftToRight(_[0])), plotShots) : leftToRight)
-
-    plotShots.shotFill = (..._) => 
-        (_.length ? ((shotPlotter.pointFill(_[0])), plotShots) : shotPlotter.pointFill())
-    plotShots.shotStroke = (..._) => 
-        (_.length ? ((shotPlotter.pointStroke(_[0])), plotShots) : shotPlotter.pointStroke())
-    plotShots.shotStrokeWidth = (..._) => 
-        (_.length ? ((shotPlotter.pointStrokeWidth(_[0])), plotShots) : shotPlotter.pointStrokeWidth())
-    plotShots.shotSize = (..._) => 
-        (_.length ? ((shotPlotter.pointSize(_[0])), plotShots) : shotPlotter.pointSize())
-    plotShots.symbolType = (..._) => 
-        (_.length ? ((shotPlotter.pointSymbolType(_[0])), plotShots) : shotPlotter.pointSymbolType())
-    plotShots.plotShotArrows = (..._) => 
-        (_.length ? ((plotShotArrows = _[0]), plotShots) : plotShotArrows)
-    plotShots.arrowColor = (..._) => 
-        (_.length ? ((arrowPlotter.arrowColor(_[0])), plotShots) : arrowPlotter.arrowColor())
-    plotShots.arrowWidth = (..._) => 
-        (_.length ? ((arrowPlotter.arrowWidth(_[0])), plotShots) : arrowPlotter.arrowWidth())
-
-    return plotShots
-    */
-
     return plotEvents()
-        .classPrefix("shot")
+        .classPrefix("shots")
         .arrowEndingX(d => d.shot.end_location[0])
         .arrowEndingY(d => d.shot.end_location[1])
-
-
 }
 
 export function plotPasses() {
-    
-    let passClassPrefix = "passes"
-
-    let passFill = "white"
-    let passStroke = "black"
-    let passStrokeWidth = 0.1
-    let passSize = 0.5
-
-    let leftToRight = true
-
-    let symbolType = d3.symbolCircle
-
-    let plotPassArrows = true
-    let arrowColor = "black"
-    let arrowWidth = 0.5
-
-    function plotPasses(ctx) {
-
-        let arrowPlotter = plotArrows()
-            .arrowClass(`${passClassPrefix}_PassArrows`)
-            .arrowColor(arrowColor)
-            .arrowWidth(arrowWidth)
-            .leftToRight(leftToRight)
-            .arrowEndingX(d => d.pass.end_location[0])
-            .arrowEndingY(d => d.pass.end_location[1])
-
-        let passPlotter = plotPoints()
-            .pointClass(`${passClassPrefix}_PassPoints`)
-            .pointFill(passFill)
-            .pointStroke(passStroke)
-            .pointStrokeWidth(passStrokeWidth)
-            .pointSize(passSize)
-            .pointSymbolType(symbolType)
-            .leftToRight(leftToRight)
-
-
-        if (plotPassArrows) {
-            ctx.call(arrowPlotter)
-        }
-
-        ctx.call(passPlotter) 
-
-    }
-
-    plotPasses.passClassPrefix = (..._) => (_.length ? ((passClassPrefix = _[0]), plotPasses) : passClassPrefix)
-
-    plotPasses.passFill = (..._) => (_.length ? ((passFill = _[0]), plotPasses) : passFill)
-    plotPasses.passStroke = (..._) => (_.length ? ((passStroke = _[0]), plotPasses) : passStroke)
-    plotPasses.passStrokeWidth = (..._) => (_.length ? ((passStrokeWidth = _[0]), plotPasses) : passStrokeWidth)
-
-    plotPasses.passSize = (..._) => (_.length ? ((passSize = _[0]), plotPasses) : passSize)
-
-    plotPasses.leftToRight = (..._) => (_.length ? ((leftToRight = _[0]), plotPasses) : leftToRight)
- 
-    plotPasses.symbolType = (..._) => (_.length ? ((symbolType = _[0]), plotPasses) : symbolType)
-
-    plotPasses.plotPassArrows = (..._) => (_.length ? ((plotPassArrows = _[0]), plotPasses) : plotPassArrows)
-    plotPasses.arrowColor = (..._) => (_.length ? ((arrowColor = _[0]), plotPasses) : arrowColor)
-    plotPasses.arrowWidth = (..._) => (_.length ? ((arrowWidth = _[0]), plotPasses) : arrowWidth)
-
-    return plotPasses
-
+    return plotEvents()
+        .fill("white")
+        .strokeWidth(0.1)
+        .size(0.8)
+        .symbolType(d3.symbolCircle)
+        .arrowColor("white")
+        .arrowEndingX(d => d.pass.end_location[0])
+        .arrowEndingY(d => d.pass.end_location[1])
 }
 
 export function plotDribbles() {}
