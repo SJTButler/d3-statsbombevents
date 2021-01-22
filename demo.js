@@ -56,14 +56,14 @@ function sb_callback(data) {
    */
 
     shotplotter_arsenal = d3.plotShots()
-        .shotClassPrefix("AWFC")
-        .shotSize(d => Math.sqrt(d.shot.statsbomb_xg) * 10)
+        .classPrefix("AWFC")
+        .size(d => Math.sqrt(d.shot.statsbomb_xg) * 10)
         .symbolType(d => (d.player.name == "Vivianne Miedema" ? d3.symbolSquare : d3.symbolCross))
 
     pitch1.datum(arsenal_goals).call(shotplotter_arsenal)
 
     shotplotter_bristol = shotplotter_arsenal
-        .shotClassPrefix("BWFC")
+        .classPrefix("BWFC")
         .leftToRight(false)
 
     pitch1.datum(bristol_goals).call(shotplotter_bristol)

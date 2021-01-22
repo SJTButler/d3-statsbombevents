@@ -255,8 +255,73 @@ export function plotArrows() {
 
 }
 
-export function plotShots() {
+export function plotEvents() {
 
+    let classPrefix = "event"
+    let plotEventArrows = true
+
+    let arrowPlotter = plotArrows()
+        .arrowClass(`${classPrefix}_Arrows`)
+    
+    let shotPlotter = plotPoints()
+        .pointClass(`${classPrefix}_Points`)
+
+    function plotEvents(ctx) {
+
+        if (plotEventArrows) {
+            ctx.call(arrowPlotter)
+        }
+        ctx.call(shotPlotter) 
+
+    }
+    //Shared attributes
+    plotEvents.classPrefix = (..._) => (_.length ? (classPrefix = _[0],
+         arrowPlotter.arrowClass(`${_[0]}_Arrows`),
+         shotPlotter.pointClass(`${_[0]}_Points`), plotEvents) : classPrefix)
+    plotEvents.plotEventArrows = (..._) => 
+        (_.length ? ((plotEventArrows = _[0]), plotEvents) : plotEventArrows)
+    plotEvents.leftToRight = (..._) => (_.length ? ((
+        arrowPlotter.leftToRight(_[0]),
+        shotPlotter.leftToRight(_[0])), plotEvents) : shotPlotter.leftToRight())
+
+    //Location Attributes
+    plotEvents.locationX = (..._) => (_.length ? (
+        shotPlotter.pointLocationX(),
+        arrowPlotter.arrowStartingX(), plotEvents) : shotPlotter.pointLocationX())
+    plotEvents.locationY = (..._) => (_.length ? (
+        shotPlotter.pointLocationY(),
+        arrowPlotter.arrowStartingY(), plotEvents) : shotPlotter.pointLocationY())
+
+    plotEvents.arrowEndingX = (..._) =>
+        (_.length ? (arrowPlotter.arrowEndingX(_[0]), plotEvents) : arrowPlotter.arrowEndingX())
+    plotEvents.arrowEndingY = (..._) =>
+        (_.length ? (arrowPlotter.arrowEndingY(_[0]), plotEvents) : arrowPlotter.arrowEndingY())
+
+    
+    //Shot Plotter styling attributes
+    plotEvents.fill = (..._) => 
+        (_.length ? ((shotPlotter.pointFill(_[0])), plotEvents) : shotPlotter.pointFill())
+    plotEvents.stroke = (..._) => 
+        (_.length ? ((shotPlotter.pointStroke(_[0])), plotEvents) : shotPlotter.pointStroke())
+    plotEvents.strokeWidth = (..._) => 
+        (_.length ? ((shotPlotter.pointStrokeWidth(_[0])), plotEvents) : shotPlotter.pointStrokeWidth())
+    plotEvents.size = (..._) => 
+        (_.length ? ((shotPlotter.pointSize(_[0])), plotEvents) : shotPlotter.pointSize())
+    plotEvents.symbolType = (..._) => 
+        (_.length ? ((shotPlotter.pointSymbolType(_[0])), plotEvents) : shotPlotter.pointSymbolType())
+
+    //Arrow Plotter Attributes
+    plotEvents.arrowColor = (..._) => 
+        (_.length ? ((arrowPlotter.arrowColor(_[0])), plotEvents) : arrowPlotter.arrowColor())
+    plotEvents.arrowWidth = (..._) => 
+        (_.length ? ((arrowPlotter.arrowWidth(_[0])), plotEvents) : arrowPlotter.arrowWidth())
+
+    return plotEvents
+
+}
+
+export function plotShots() {
+    /*
     let shotClassPrefix = "shots"
     let leftToRight = true
     let plotShotArrows = true
@@ -304,6 +369,14 @@ export function plotShots() {
         (_.length ? ((arrowPlotter.arrowWidth(_[0])), plotShots) : arrowPlotter.arrowWidth())
 
     return plotShots
+    */
+
+    return plotEvents()
+        .classPrefix("shot")
+        .arrowEndingX(d => d.shot.end_location[0])
+        .arrowEndingY(d => d.shot.end_location[1])
+
+
 }
 
 export function plotPasses() {
