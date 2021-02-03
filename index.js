@@ -1,1 +1,1 @@
-export { pitch, plotPoints, plotArrows, plotEvents, plotShots, plotPasses } from './src/statsbombevents.js'
+export { pitch, plotPoints, plotArrows, plotEvents, plotShots, plotPasses, plotCarries } from './src/statsbombevents.js'

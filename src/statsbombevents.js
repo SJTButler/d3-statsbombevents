@@ -329,16 +329,20 @@ export function plotShots() {
 
 export function plotPasses() {
     return plotEvents()
-        .fill("white")
-        .strokeWidth(0.1)
+        .classPrefix("passes")
         .size(0.8)
         .symbolType(d3.symbolCircle)
-        .arrowColor("white")
         .arrowEndingX(d => d.pass.end_location[0])
         .arrowEndingY(d => d.pass.end_location[1])
 }
 
-export function plotDribbles() {}
+export function plotCarries() {
+    return plotEvents()
+        .classPrefix("carries")
+        .symbolType(d3.symbolTriangle)
+        .arrowEndingX(d => d.carry.end_location[0])
+        .arrowEndingY(d => d.carry.end_location[1])
+}
 
 export function heatmap() {
 

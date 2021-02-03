@@ -16,6 +16,7 @@
   "author": "Sam Butler",
   "license": "BSD-3",
   "devDependencies": {
+    "http-server": "^0.12.3",
     "rollup": "^2.36.1"
   }
 }
