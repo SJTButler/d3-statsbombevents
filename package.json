@@ -2,10 +2,18 @@
   "name": "d3-statsbombevents",
   "version": "0.1.0",
   "description": "d3 library for visualising statsbomb events",
+  "homepage": "https://github.com/SJTButler/d3-statsbombevents",
+  "repository": {
+    "type": "git",
+    "url" : "https://github.com/SJTButler/d3-statsbombevents.git"
+  },
   "main": "index.js",
   "scripts": {
     "test": "npm run build && http-server",
-    "build": "rm -rf build && mkdir build && rollup -f umd --output.extend -n d3 -o build/d3-statsbombevents.js -- index.js"
+    "build": "rm -rf build && mkdir build && rollup -f umd --output.extend -n d3 -o build/d3-statsbombevents.js -- index.js",
+    "minify": "uglifyjs build/d3-statsbombevents.js -c -o build/d3-statsbombevents.min.js", 
+    "prepublish": "npm run build && npm run minify",
+    "postpublish": "zip -j build/d3-statsbombevents.zip -- LICENSE README.md build/d3-statsbombevents.js build/d3-statsbombevents.min.js"
   },
   "keywords": [
     "d3",
@@ -14,9 +22,12 @@
     "soccer-analytics"
   ],
   "author": "Sam Butler",
-  "license": "BSD-3",
+  "license": "BSD-3-Clause",
   "devDependencies": {
     "http-server": "^0.12.3",
-    "rollup": "^2.36.1"
+    "rollup": "^2.36.1",
+    "uglify-es": "^3.3.9"
+  },
+  "dependencies": {
   }
 }
